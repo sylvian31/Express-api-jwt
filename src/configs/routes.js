@@ -1,7 +1,8 @@
-UserController = require('../controllers/user-controller')
+AuthentificationController = require('../controllers/authentification-controller')
 
 module.exports = (server) => {
 
-    server.get('/', UserController.readAll);
+
+    server.post('/signup', AuthentificationController.signup);
 
 }
