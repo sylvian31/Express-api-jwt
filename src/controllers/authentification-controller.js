@@ -1,6 +1,15 @@
 const User = require('../models/user');
 const lodash = require('lodash');
+const jwt = require('jwt-simple')
+const config = require('../config/config')
 
+function getToken(user) {
+    const timeStamp = new Date().getTime();
+    return jwt.encode({
+        sub: user.id,
+        iat: timeStamp
+    }, config.secret)
+}
 
 module.exports = {
     readAll(req, res, next) {
@@ -33,12 +42,16 @@ module.exports = {
                     if (err) {
                         return next(err);
                     }
-                    res.json(user);
+                    res.json({ token: getToken(user) });
                 })
             } else {
                 return res.status(422).send({ error: "Mot de passe ou email vide" })
             }
         })
+    },
+
+    signin(req, res, next) {
+        res.json({ token: getToken(req.user) });
     },
 
     delete(req, res, next) {
