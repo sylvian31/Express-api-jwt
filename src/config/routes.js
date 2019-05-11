@@ -2,18 +2,18 @@ const AuthentificationController = require('../controllers/authentification-cont
 require('../services/passport')
 const passport = require('passport')
 
-const requireToken = passport.authenticate('jwt', { session: false });
-const requireValidCredentials = passport.authenticate('local', { session: false });
+const requireToken = passport.authenticate('jwt');
+
 
 module.exports = (server) => {
 
 
     server.post('/signup', AuthentificationController.signup);
 
-    server.get('/ressourceSecret', requireToken, function (req, res) {
-        res.send({ code: 42 });
+    server.get('/secure', requireToken, function (req, res) {
+        res.send({ message: "Requete sécurisé YEAHHHH !!!!" });
     })
 
-    server.post('/signin', requireValidCredentials, AuthentificationController.signin);
+    server.post('/signin', AuthentificationController.signin);
 
 }

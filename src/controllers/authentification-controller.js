@@ -2,6 +2,7 @@ const User = require('../models/user');
 const lodash = require('lodash');
 const jwt = require('jwt-simple')
 const config = require('../config/config')
+const passport = require('passport')
 
 function getToken(user) {
     const timeStamp = new Date().getTime();
@@ -51,7 +52,11 @@ module.exports = {
     },
 
     signin(req, res, next) {
-        res.json({ token: getToken(req.user) });
+		passport.authenticate('local', function(err, user, info){
+			if (err) return next(err);
+			if(!user) return res.status(401).send({ message: "Mot de passe ou email invalide" });
+			res.json({ token: getToken(req.user) });
+		})(req, res, next)
     },
 
     delete(req, res, next) {
