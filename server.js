@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const http = require('http');
+const cors = require('cors');
 
 mongoose.Promise = global.Promise;
 
@@ -24,6 +25,7 @@ mongoose.connection
 
 expressServer.use(morgan('combined'));
 expressServer.use(bodyParser.json({type: '*/*'}));
+expressServer.use(cors());
 expressServer.set('json spaces', 2);
 routes(expressServer);
 
